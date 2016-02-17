@@ -1,3 +1,5 @@
+
+import atexit
 import logging
 import sqlite3
 
@@ -16,6 +18,9 @@ class Database(object):
         self.conn = sqlite3.connect(path)
         self.conn.row_factory = dict_factory
 
+        # Clean-up after ourselves
+        atexit.register(self.close)
+
     def __getattr__(self, name):
         return getattr(self.conn, name)
 
@@ -24,6 +29,7 @@ class Database(object):
 
     def close(self):
         try:
+            logger.debug('Attempt to close database connection')
             self.conn.close()
         except Exception as e:
             logger.debug(e)

@@ -13,8 +13,6 @@ MONITOR_OUT = sark.globals.get('MONITOROUT', '/home/sark/monout')
 RECQSEARCHLIM = sark.globals.get('RECQSEARCHLIM', 400)
 RECQDITHER = sark.globals.get('RECQDITHER', 1)
 
-sark.database.close()
-
 
 def main():
 
