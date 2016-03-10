@@ -533,8 +533,8 @@ public function createTuple($tab,$rec,$check=true) {
 			return "Row ( " . $rec['pkey'] . " ) already exists!";
 		}
 	} 
-	$ret = $this->getLc(); 
-	if ($ret) {
+
+	if ($tab == 'ipphone' && $this->getLc()) {
 		return "Extension limit exceeded";
 	}
 /*
