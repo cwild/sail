@@ -6,7 +6,7 @@ import os
 import sark
 import sys
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('sark.queue.move')
 
 MONITOR_STAGE = sark.globals.get('MONITORSTAGE', '/home/sark/monstage')
 MONITOR_OUT = sark.globals.get('MONITOROUT', '/home/sark/monout')
@@ -23,12 +23,12 @@ def main():
             logger.critical('Directory does not exist: %s', directory)
             return errno.ENOENT
 
-    for dirpath, dirnames, filenames in os.walk(MONITOR_STAGE):
-        """
-        filenames is a list of files, excluding all subdirectories below the MONITOR_STAGE
-        break so we do not traverse subdirs
-        """
-        break
+    # Which files should we be working with?
+    filenames = [f for f in os.listdir(MONITOR_STAGE) if os.path.isfile(f)]
+
+    if not filenames:
+        logger.debug('No files to process in %s', MONITOR_STAGE)
+        return 0
 
     lines_processed = 0
     for line in sark.utils.reverse_readline('/var/log/asterisk/queue_log'):
